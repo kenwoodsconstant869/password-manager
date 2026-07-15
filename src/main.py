@@ -10,10 +10,10 @@ import sys
 
 from dotenv import load_dotenv
 from waitress import serve
+from src.infrastructure.api.app import app
 
 load_dotenv()  # charge automatiquement le fichier .env s'il existe
 
-from src.infrastructure.api.app import app
 
 
 def main() -> None:
