@@ -8,7 +8,10 @@ Lance le serveur API avec waitress. Utilisation :
 import os
 import sys
 
+from dotenv import load_dotenv
 from waitress import serve
+
+load_dotenv()  # charge automatiquement le fichier .env s'il existe
 
 from src.infrastructure.api.app import app
 
@@ -20,8 +23,8 @@ def main() -> None:
             "Génère-en une avec :\n"
             "  python -c \"from src.infrastructure.security.fernet_encryption_service "
             "import FernetEncryptionService; print(FernetEncryptionService.generate_key().decode())\"\n"
-            "Puis exporte-la (PowerShell) :\n"
-            "  $env:ENCRYPTION_KEY=\"ta_cle_ici\""
+            "Puis mets-la dans un fichier .env à la racine :\n"
+            "  ENCRYPTION_KEY=ta_cle_ici"
         )
         sys.exit(1)
 
