@@ -35,6 +35,9 @@ class SQLiteUserRepository(UserRepository):
         user.id = cursor.lastrowid
         return user
 
+    def close(self) -> None:
+        self._conn.close()
+
     def get_the_user(self) -> User | None:
         row = self._conn.execute("SELECT id, username, password_hash, salt FROM users LIMIT 1").fetchone()
         if row is None:

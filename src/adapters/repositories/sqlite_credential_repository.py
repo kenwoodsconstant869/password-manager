@@ -36,6 +36,9 @@ class SQLiteCredentialRepository(CredentialRepository):
         credential.id = cursor.lastrowid
         return credential
 
+    def close(self) -> None:
+        self._conn.close()
+
     def get_by_id(self, credential_id: int) -> Credential | None:
         row = self._conn.execute(
             "SELECT id, service, username, password, created_at FROM credentials WHERE id = ?",

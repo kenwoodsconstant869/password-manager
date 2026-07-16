@@ -1,35 +1,26 @@
 """
 Point d'entrée principal du projet.
 
-Lance le serveur API avec waitress. Utilisation :
-    python -m src.main
+Lance une interface locale en ligne de commande.
+Utilisation :
+    python -m src.main register alice correcthorsebatterystaple
+    python -m src.main add GitHub alice Secr3t123 correcthorsebatterystaple
+    python -m src.main list correcthorsebatterystaple
 """
 
-import os
 import sys
 
-from dotenv import load_dotenv
-from waitress import serve
-from src.infrastructure.api.app import app
-
-load_dotenv()  # charge automatiquement le fichier .env s'il existe
-
+from src.infrastructure.cli import PasswordManagerCLI
 
 
 def main() -> None:
-    if not os.environ.get("ENCRYPTION_KEY"):
-        print(
-            "ERREUR : la variable d'environnement ENCRYPTION_KEY n'est pas définie.\n"
-            "Génère-en une avec :\n"
-            "  python -c \"from src.infrastructure.security.fernet_encryption_service "
-            "import FernetEncryptionService; print(FernetEncryptionService.generate_key().decode())\"\n"
-            "Puis mets-la dans un fichier .env à la racine :\n"
-            "  ENCRYPTION_KEY=ta_cle_ici"
-        )
-        sys.exit(1)
-
-    print("Démarrage du serveur sur http://localhost:8000 ...")
-    serve(app, host="0.0.0.0", port=8000)
+    cli = PasswordManagerCLI()
+    result = cli.dispatch(sys.argv[1:])
+    if isinstance(result, list):
+        for item in result:
+            print(item)
+    else:
+        print(result)
 
 
 if __name__ == "__main__":
